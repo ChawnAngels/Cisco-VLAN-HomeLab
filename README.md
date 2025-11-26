@@ -67,3 +67,13 @@ interface Fa0/4
 ```
 
 These commands configure the trunk link between Switch 1 and Switch 2 to carry VLANs 10, 20, and 30 using 802.1Q.
+
+### Verification
+
+Trunk status on Switch 1:
+
+![Trunk verification on Switch 1](screenshots/show-interfaces-trunk-Switch1.png)
+
+Trunk status on Switch 2:
+
+![Trunk verification on Switch 2](screenshots/show-interfaces-trunk-Switch2.png)
