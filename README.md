@@ -77,3 +77,55 @@ Trunk status on Switch 1:
 Trunk status on Switch 2:
 
 ![Trunk verification on Switch 2](screenshots/show-interfaces-trunk-Switch2.png)
+
+## Lab 2 – Management VLAN + SSH
+
+### Goal
+
+Create a dedicated management VLAN (VLAN 99) and enable SSH access to both switches.
+
+### IP plan
+
+- Laptop (USB Ethernet): `192.168.99.100/24`
+- 2960-X (CORE) `Vlan99`: `192.168.99.11/24`
+- 2960 (ACCESS) `Vlan99`: `192.168.99.12/24`
+- Management VLAN: **VLAN 99 (MGMT)**
+
+### Key configuration steps
+
+**On both switches**
+
+- Created VLAN 99 and named it `MGMT`.
+- Configured `interface vlan 99` with a static IP.
+- Enabled SSH:
+  - Set `hostname` and `ip domain-name`.
+  - Created local user `netadmin` with privilege 15.
+  - Generated RSA keys (`crypto key generate rsa 2048`).
+  - Configured `line vty 0 4` for SSH only and `login local`.
+
+**Trunk links**
+
+- 2960-X: `Gi1/0/4` is a trunk.
+- 2960: `Fa0/4` is a trunk.
+- Trunk allowed VLANs: `10,20,30,99`
+
+**Management access ports**
+
+- 2960-X: `Gi1/0/24` is an access port in VLAN 99.
+- 2960: `Fa0/24` is an access port in VLAN 99.
+
+### Verification
+
+- `show ip interface brief` on both switches to see `Vlan99` up/up with the correct IP.
+- `show interfaces trunk` to confirm VLAN 99 is allowed on the trunk.
+- From the laptop:
+  - `ping 192.168.99.11`
+  - `ping 192.168.99.12`
+- SSH tests using PuTTY:
+  - `192.168.99.11` → CORE-2960X
+  - `192.168.99.12` → ACCESS-2960
+
+Screenshots for this lab are in:
+
+- `screenshots/lab2-management-vlan-ssh/`
+
